@@ -75,13 +75,35 @@ Manage deployment templates:
 # Access through the main client
 client.templates
 
-# Available methods
-client.templates.list_all()      # List all templates
-client.templates.get_info(...)   # Get template information
-client.templates.get_featured()  # Get featured templates
-client.templates.save(...)       # Save a new template
-client.templates.update(...)     # Update a template
-client.templates.delete(...)     # Delete a template
+# Available methods and their endpoints
+client.templates.list_all()      # GET /templates
+client.templates.get_info(id)    # GET /templates/{template_id}/info
+client.templates.get_featured()  # GET /templates/featured
+client.templates.save(          # POST /templates/save
+    name="my-template",         # Required: name for the template
+    config=launch_config,       # Required: configuration for the template
+    description="..."          # Optional: template description
+)
+client.templates.update(...)     # POST /templates/{template_id}/update
+client.templates.delete(...)     # POST /templates/{template_id}/delete
+```
+
+The template configuration should be provided using the `config` parameter when saving or updating templates. Example:
+
+```python
+from shadeform import LaunchConfiguration
+
+config = LaunchConfiguration.docker(
+    image="pytorch/pytorch:latest",
+    command="python train.py"
+)
+
+# Save a new template
+client.templates.save(
+    name="pytorch-template",
+    description="PyTorch training environment",
+    config=config  # Not launch_config
+)
 ```
 
 ## Utility Classes

@@ -102,51 +102,57 @@ def test_list_instances(mock_request):
 @patch('shadeform.client.ShadeformClient.request')
 def test_update_instance(mock_request):
     """Test updating an instance."""
-    mock_request.return_value = {"id": "instance-123", "status": "updated"}
+    mock_request.return_value = {"success": True}
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.instances.update("instance-123", {"name": "new-name"})
     
     mock_request.assert_called_once_with(
-        "POST", 
+        "POST",
         "/instances/instance-123/update",
         json={"name": "new-name"}
     )
-    assert result["status"] == "updated"
+    assert result["success"] is True
 
 @patch('shadeform.client.ShadeformClient.request')
 def test_delete_instance(mock_request):
     """Test deleting an instance."""
-    mock_request.return_value = None
+    mock_request.return_value = {"success": True, "message": "Instance scheduled for deletion"}
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.instances.delete("instance-123")
     
     mock_request.assert_called_once_with("POST", "/instances/instance-123/delete")
-    assert result is None
+    assert result["success"] is True
+    assert "message" in result
 
 @patch('shadeform.client.ShadeformClient.request')
 def test_restart_instance(mock_request):
     """Test restarting an instance."""
-    mock_request.return_value = {"id": "instance-123", "status": "restarting"}
+    mock_request.return_value = {"success": True, "status": "rebooting"}
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.instances.restart("instance-123")
     
     mock_request.assert_called_once_with("POST", "/instances/instance-123/restart")
-    assert result["status"] == "restarting"
+    assert result["status"] == "rebooting"
 
 @patch('shadeform.client.ShadeformClient.request')
 def test_list_instance_types(mock_request):
     """Test listing instance types."""
     mock_request.return_value = [
-        {"name": "A100_80Gx1", "gpu": "A100"},
-        {"name": "A10_24GBx1", "gpu": "A10"}
+        {
+            "type": "A100_80Gx1",
+            "provider": "aws",
+            "memory_gb": 80,
+            "vCPUs": 12,
+            "hourly_price": 3.50
+        }
     ]
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.instances.list_types()
     
     mock_request.assert_called_once_with("GET", "/instances/types")
-    assert len(result) == 2
-    assert result[0]["gpu"] == "A100"
+    assert isinstance(result, list)
+    assert result[0]["type"] == "A100_80Gx1"

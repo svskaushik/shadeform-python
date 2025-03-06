@@ -107,7 +107,7 @@ for template in templates:
 client.templates.save(
     name="custom-training",
     description="Custom PyTorch environment",
-    launch_config=launch_config
+    config=launch_config
 )
 ```
 
