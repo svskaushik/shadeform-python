@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the Shadeform Python SDK! This do
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/shadeform/shadeform-python.git
+git clone https://github.com/svskaushik/shadeform-python.git
 cd shadeform-python
 ```
 

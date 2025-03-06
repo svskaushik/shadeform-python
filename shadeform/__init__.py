@@ -45,9 +45,11 @@ TemplateID = str
 LaunchConfigType = dict
 VolumeAttachmentType = dict
 
+
 def get_version() -> str:
     """Return the current version of the SDK."""
     return __version__
+
 
 def get_api_version() -> str:
     """Return the current API version supported by the SDK."""

@@ -5,14 +5,12 @@ from typing import Any, Dict, List, Optional, cast
 from .base import BaseResource
 from ..error import ShadeformValidationError
 
+
 class SSHKeyClient(BaseResource):
     """Client for managing Shadeform SSH keys."""
 
     def add(
-        self,
-        name: str,
-        public_key: str,
-        description: Optional[str] = None
+        self, name: str, public_key: str, description: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Add a new SSH key.
@@ -30,14 +28,10 @@ class SSHKeyClient(BaseResource):
         """
         if not public_key.strip():
             raise ShadeformValidationError(
-                "Public key cannot be empty",
-                field="public_key"
+                "Public key cannot be empty", field="public_key"
             )
 
-        payload = {
-            "name": name,
-            "public_key": public_key
-        }
+        payload = {"name": name, "public_key": public_key}
         if description:
             payload["description"] = description
 
@@ -89,4 +83,6 @@ class SSHKeyClient(BaseResource):
         """
         response = self._get_dict("/sshkeys")
         ssh_keys = response.get("ssh_keys", [])
-        return cast(List[Dict[str, Any]], ssh_keys if isinstance(ssh_keys, list) else [])
+        return cast(
+            List[Dict[str, Any]], ssh_keys if isinstance(ssh_keys, list) else []
+        )

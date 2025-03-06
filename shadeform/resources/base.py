@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 T = TypeVar("T", bound="BaseResource")
 
+
 class BaseResource:
     """Base class for all resource clients."""
 
@@ -22,11 +23,7 @@ class BaseResource:
         self.client = client
 
     def _make_request(
-        self,
-        method: str,
-        endpoint: str,
-        expect_list: bool = False,
-        **kwargs: Any
+        self, method: str, endpoint: str, expect_list: bool = False, **kwargs: Any
     ) -> Union[Dict[str, Any], List[Dict[str, Any]], None]:
         """
         Helper method to make requests to the API.
@@ -50,15 +47,19 @@ class BaseResource:
 
         # Type checking based on expected return type
         if expect_list and not isinstance(response, list):
-            raise ShadeformError(f"Expected list response, got {type(response).__name__}")
-        elif not expect_list and not isinstance(response, dict) and response is not None:
-            raise ShadeformError(f"Expected dict response, got {type(response).__name__}")
+            raise ShadeformError(
+                f"Expected list response, got {type(response).__name__}"
+            )
+        elif (
+            not expect_list and not isinstance(response, dict) and response is not None
+        ):
+            raise ShadeformError(
+                f"Expected dict response, got {type(response).__name__}"
+            )
 
         return response
 
-    def _get_dict(
-        self, endpoint: str, **kwargs: Any
-    ) -> Dict[str, Any]:
+    def _get_dict(self, endpoint: str, **kwargs: Any) -> Dict[str, Any]:
         """
         Make a GET request that returns a dictionary.
 
@@ -76,9 +77,7 @@ class BaseResource:
         assert isinstance(result, dict), "Expected dict response"
         return result
 
-    def _get_list(
-        self, endpoint: str, **kwargs: Any
-    ) -> List[Dict[str, Any]]:
+    def _get_list(self, endpoint: str, **kwargs: Any) -> List[Dict[str, Any]]:
         """
         Make a GET request that returns a list.
 
@@ -96,9 +95,7 @@ class BaseResource:
         assert isinstance(result, list), "Expected list response"
         return result
 
-    def _post_dict(
-        self, endpoint: str, **kwargs: Any
-    ) -> Dict[str, Any]:
+    def _post_dict(self, endpoint: str, **kwargs: Any) -> Dict[str, Any]:
         """
         Make a POST request that returns a dictionary.
 
@@ -116,9 +113,7 @@ class BaseResource:
         assert isinstance(result, dict), "Expected dict response"
         return result
 
-    def _post_none(
-        self, endpoint: str, **kwargs: Any
-    ) -> None:
+    def _post_none(self, endpoint: str, **kwargs: Any) -> None:
         """
         Make a POST request that returns None.
 

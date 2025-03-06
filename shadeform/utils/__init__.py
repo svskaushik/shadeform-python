@@ -4,7 +4,7 @@ from .helpers import (
     LaunchConfiguration,
     VolumeConfiguration,
     validate_instance_type,
-    validate_volume_size
+    validate_volume_size,
 )
 
 __all__ = [

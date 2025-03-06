@@ -70,7 +70,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/shadeform/shadeform-python"
+Homepage = "https://github.com/svskaushik/shadeform-python"
 Documentation = "https://docs.shadeform.ai"
-Repository = "https://github.com/shadeform/shadeform-python.git"
-"Bug Tracker" = "https://github.com/shadeform/shadeform-python/issues"
+Repository = "https://github.com/svskaushik/shadeform-python.git"
+"Bug Tracker" = "https://github.com/svskaushik/shadeform-python/issues"

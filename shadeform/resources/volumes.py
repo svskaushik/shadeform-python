@@ -6,6 +6,7 @@ from .base import BaseResource
 from ..error import ShadeformValidationError
 from ..utils.helpers import validate_volume_size
 
+
 class VolumeClient(BaseResource):
     """Client for managing Shadeform volumes."""
 
@@ -16,7 +17,7 @@ class VolumeClient(BaseResource):
         size_gb: int,
         volume_type: str,
         description: Optional[str] = None,
-        snapshot_id: Optional[str] = None
+        snapshot_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Create a new volume.
@@ -37,15 +38,14 @@ class VolumeClient(BaseResource):
         """
         if not validate_volume_size(size_gb):
             raise ShadeformValidationError(
-                f"Invalid volume size: {size_gb}GB",
-                field="size_gb"
+                f"Invalid volume size: {size_gb}GB", field="size_gb"
             )
 
         payload = {
             "provider": provider,
             "name": name,
             "size_gb": size_gb,
-            "volume_type": volume_type
+            "volume_type": volume_type,
         }
 
         if description:

@@ -2,6 +2,7 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+
 class LaunchConfiguration:
     """Utility class for creating launch configurations."""
 
@@ -10,7 +11,7 @@ class LaunchConfiguration:
         image: str,
         command: Optional[str] = None,
         env_vars: Optional[Dict[str, str]] = None,
-        ports: Optional[List[int]] = None
+        ports: Optional[List[int]] = None,
     ) -> Dict[str, Any]:
         """
         Create a Docker-based launch configuration.
@@ -24,10 +25,7 @@ class LaunchConfiguration:
         Returns:
             Launch configuration dictionary
         """
-        config: Dict[str, Any] = {
-            "type": "docker",
-            "image": image
-        }
+        config: Dict[str, Any] = {"type": "docker", "image": image}
 
         if command is not None:
             config["command"] = command
@@ -39,10 +37,7 @@ class LaunchConfiguration:
         return config
 
     @staticmethod
-    def script(
-        content: str,
-        language: str = "bash"
-    ) -> Dict[str, Any]:
+    def script(content: str, language: str = "bash") -> Dict[str, Any]:
         """
         Create a script-based launch configuration.
 
@@ -53,21 +48,14 @@ class LaunchConfiguration:
         Returns:
             Launch configuration dictionary
         """
-        return {
-            "type": "script",
-            "language": language,
-            "content": content
-        }
+        return {"type": "script", "language": language, "content": content}
 
 
 class VolumeConfiguration:
     """Utility class for creating volume configurations."""
 
     @staticmethod
-    def create_attachment(
-        volume_id: str,
-        mount_path: str
-    ) -> Dict[str, str]:
+    def create_attachment(volume_id: str, mount_path: str) -> Dict[str, str]:
         """
         Create a volume attachment configuration.
 
@@ -81,10 +69,7 @@ class VolumeConfiguration:
         if not mount_path.startswith("/"):
             mount_path = f"/{mount_path}"
 
-        return {
-            "volume_id": volume_id,
-            "mount_path": mount_path
-        }
+        return {"volume_id": volume_id, "mount_path": mount_path}
 
 
 def validate_instance_type(instance_type: str) -> bool:
@@ -105,7 +90,7 @@ def validate_instance_type(instance_type: str) -> bool:
     try:
         gpu_type, config = instance_type.split("_", 1)
         specs, count = config.rsplit("x", 1)
-        
+
         # Validate count is a positive integer
         if not count.isdigit() or int(count) < 1:
             return False

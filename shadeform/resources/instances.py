@@ -6,6 +6,7 @@ from .base import BaseResource
 from ..error import ShadeformValidationError
 from ..utils.helpers import validate_instance_type
 
+
 class InstanceClient(BaseResource):
     """Client for managing Shadeform instances."""
 
@@ -17,7 +18,7 @@ class InstanceClient(BaseResource):
         instance_type: str,
         launch_config: Dict[str, Any],
         ssh_key_id: Optional[str] = None,
-        volumes: Optional[List[Dict[str, Any]]] = None
+        volumes: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         """
         Create a new instance.
@@ -40,8 +41,7 @@ class InstanceClient(BaseResource):
         """
         if not validate_instance_type(instance_type):
             raise ShadeformValidationError(
-                f"Invalid instance type: {instance_type}",
-                field="instance_type"
+                f"Invalid instance type: {instance_type}", field="instance_type"
             )
 
         payload: Dict[str, Any] = {
@@ -49,7 +49,7 @@ class InstanceClient(BaseResource):
             "name": name,
             "region": region,
             "instance_type": instance_type,
-            "launch_configuration": launch_config
+            "launch_configuration": launch_config,
         }
 
         if ssh_key_id:
@@ -57,7 +57,9 @@ class InstanceClient(BaseResource):
 
         if volumes:
             # Ensure each volume config is converted to dict format
-            payload["volumes"] = [dict(vol) if hasattr(vol, "__dict__") else vol for vol in volumes]
+            payload["volumes"] = [
+                dict(vol) if hasattr(vol, "__dict__") else vol for vol in volumes
+            ]
 
         return self._post_dict("/instances/create", json=payload)
 

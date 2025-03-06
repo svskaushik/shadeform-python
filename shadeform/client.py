@@ -14,10 +14,11 @@ from .resources.volumes import VolumeClient
 
 DEFAULT_BASE_URL = "https://api.shadeform.ai/v1"
 
+
 class ShadeformClient:
     """
     Main client class for interacting with the Shadeform API.
-    
+
     This class provides access to all API resources and handles authentication
     and request management.
     """
@@ -57,26 +58,21 @@ class ShadeformClient:
 
     def _setup_session(self) -> None:
         """Configure the requests session with appropriate headers."""
-        self.session.headers.update({
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "User-Agent": f"shadeform-python/{self._get_version()}"
-        })
+        self.session.headers.update(
+            {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": f"shadeform-python/{self._get_version()}",
+            }
+        )
 
         if self.api_key:
-            self.session.headers.update({
-                "X-API-Key": self.api_key
-            })
+            self.session.headers.update({"X-API-Key": self.api_key})
         elif self.jwt_token:
-            self.session.headers.update({
-                "Authorization": f"Bearer {self.jwt_token}"
-            })
+            self.session.headers.update({"Authorization": f"Bearer {self.jwt_token}"})
 
     def request(
-        self,
-        method: str,
-        endpoint: str,
-        **kwargs: Any
+        self, method: str, endpoint: str, **kwargs: Any
     ) -> Union[Dict[str, Any], List[Dict[str, Any]], None]:
         """
         Make a request to the API.
@@ -113,7 +109,7 @@ class ShadeformClient:
             raise ShadeformAPIError(
                 message,
                 status_code=error.response.status_code if error.response else None,
-                error_data=error_data
+                error_data=error_data,
             )
 
         except requests.exceptions.RequestException as error:
@@ -148,9 +144,7 @@ class ShadeformClient:
         try:
             data = response.json()
             if not isinstance(data, (dict, list)):
-                raise ShadeformError(
-                    f"Invalid response type: {type(data).__name__}"
-                )
+                raise ShadeformError(f"Invalid response type: {type(data).__name__}")
             return data
         except ValueError as e:
             raise ShadeformError(f"Invalid JSON response: {str(e)}")
@@ -160,6 +154,7 @@ class ShadeformClient:
         """Get the current version of the SDK."""
         try:
             from . import __version__
+
             return __version__
         except ImportError:
             return "unknown"

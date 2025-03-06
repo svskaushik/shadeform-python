@@ -6,7 +6,7 @@ setup(
     description='A Python SDK for the Shadeform API.',
     author='Shadeform',
     author_email='support@shadeform.ai',
-    url='https://github.com/shadeform/shadeform-python',
+    url='https://github.com/svskaushik/shadeform-python',
     packages=find_packages(),
     install_requires=[
         'requests>=2.25.1',
@@ -37,7 +37,7 @@ setup(
     python_requires='>=3.7',
     project_urls={
         'Documentation': 'https://docs.shadeform.ai',
-        'Source': 'https://github.com/shadeform/shadeform-python',
-        'Issues': 'https://github.com/shadeform/shadeform-python/issues',
+        'Source': 'https://github.com/svskaushik/shadeform-python',
+        'Issues': 'https://github.com/svskaushik/shadeform-python/issues',
     },
 )

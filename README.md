@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/shadeform.svg)](https://badge.fury.io/py/shadeform)
 [![Python versions](https://img.shields.io/pypi/pyversions/shadeform.svg)](https://pypi.org/project/shadeform/)
-[![License](https://img.shields.io/pypi/l/shadeform.svg)](https://github.com/shadeform/shadeform-python/blob/main/LICENSE)
+[![License](https://img.shields.io/pypi/l/shadeform.svg)](https://github.com/svskaushik/shadeform-python/blob/main/LICENSE)
 
 A powerful Python SDK for managing GPU instances and infrastructure through the Shadeform API. Simplify your GPU cloud management with an intuitive, type-safe interface.
 
@@ -122,7 +122,7 @@ client.templates.save(
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/shadeform/shadeform-python.git
+git clone https://github.com/svskaushik/shadeform-python.git
 cd shadeform-python
 ```
 
@@ -147,5 +147,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - Documentation: https://docs.shadeform.ai
-- Issue Tracker: https://github.com/shadeform/shadeform-python/issues
+- Issue Tracker: https://github.com/svskaushik/shadeform-python/issues
 - Community Chat: https://discord.gg/shadeform

@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, cast
 from .base import BaseResource
 from ..error import ShadeformValidationError
 
+
 class TemplateClient(BaseResource):
     """Client for managing Shadeform templates."""
 
@@ -17,7 +18,9 @@ class TemplateClient(BaseResource):
         """
         response = self._get_dict("/templates")
         templates = response.get("templates", [])
-        return cast(List[Dict[str, Any]], templates if isinstance(templates, list) else [])
+        return cast(
+            List[Dict[str, Any]], templates if isinstance(templates, list) else []
+        )
 
     def get_info(self, template_id: str) -> Dict[str, Any]:
         """
@@ -36,18 +39,17 @@ class TemplateClient(BaseResource):
         List featured templates.
 
         Returns:
-            List of featured templates with basic information 
+            List of featured templates with basic information
             (id, name, description)
         """
         response = self._get_dict("/templates/featured")
         featured = response.get("featured", [])
-        return cast(List[Dict[str, Any]], featured if isinstance(featured, list) else [])
+        return cast(
+            List[Dict[str, Any]], featured if isinstance(featured, list) else []
+        )
 
     def save(
-        self,
-        name: str,
-        config: Dict[str, Any],
-        description: Optional[str] = None
+        self, name: str, config: Dict[str, Any], description: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Save a new template.
@@ -60,20 +62,13 @@ class TemplateClient(BaseResource):
         Returns:
             Created template info including id
         """
-        payload = {
-            "name": name,
-            "config": config
-        }
+        payload = {"name": name, "config": config}
         if description:
             payload["description"] = description
 
         return self._post_dict("/templates/save", json=payload)
 
-    def update(
-        self,
-        template_id: str,
-        updates: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def update(self, template_id: str, updates: Dict[str, Any]) -> Dict[str, Any]:
         """
         Update a template.
 
