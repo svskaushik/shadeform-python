@@ -1,0 +1,9 @@
+# Required development dependencies for the shadeform project
+requests
+pytest
+flake8
+mypy
+black
+sphinx
+sphinx-rtd-theme
+pytest-cov
