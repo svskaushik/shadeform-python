@@ -2,9 +2,9 @@
 
 from typing import Any, Dict, List, Optional
 
-from .base import BaseResource
 from ..error import ShadeformValidationError
 from ..utils.helpers import validate_volume_size, validate_volume_type
+from .base import BaseResource
 
 
 class VolumeClient(BaseResource):
@@ -40,7 +40,7 @@ class VolumeClient(BaseResource):
             raise ShadeformValidationError(
                 f"Invalid volume size: {size_gb}GB", field="size_gb"
             )
-        
+
         # Add volume type validation
         if not validate_volume_type(volume_type):
             raise ShadeformValidationError(

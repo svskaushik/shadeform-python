@@ -1,9 +1,9 @@
 """SSH key management resource for Shadeform SDK."""
 
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional
 
-from .base import BaseResource
 from ..error import ShadeformValidationError
+from .base import BaseResource
 
 
 class SSHKeyClient(BaseResource):

@@ -1,6 +1,6 @@
 """Helper utilities for Shadeform SDK."""
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 
 class LaunchConfiguration:

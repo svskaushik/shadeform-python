@@ -1,6 +1,6 @@
 """Base resource class for Shadeform SDK."""
 
-from typing import Any, Dict, List, Optional, TypeVar, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, TypeVar, Union
 
 from ..error import ShadeformError
 
@@ -56,12 +56,16 @@ class BaseResource:
                         return value
                 return []  # Return empty list if no list found
             else:
-                raise ShadeformError(f"Unexpected response type: {type(response).__name__}")
+                raise ShadeformError(
+                    f"Unexpected response type: {type(response).__name__}"
+                )
         else:
             if isinstance(response, dict):
                 return response
             else:
-                raise ShadeformError(f"Expected dict response, got {type(response).__name__}")
+                raise ShadeformError(
+                    f"Expected dict response, got {type(response).__name__}"
+                )
 
     def _get_dict(self, endpoint: str, **kwargs: Any) -> Dict[str, Any]:
         """

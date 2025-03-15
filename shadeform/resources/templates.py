@@ -3,7 +3,6 @@
 from typing import Any, Dict, List, Optional
 
 from .base import BaseResource
-from ..error import ShadeformValidationError
 
 
 class TemplateClient(BaseResource):

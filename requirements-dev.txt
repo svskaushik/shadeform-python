@@ -4,6 +4,7 @@ pytest
 flake8
 mypy
 black
+isort
 sphinx
 sphinx-rtd-theme
 pytest-cov

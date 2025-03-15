@@ -60,8 +60,8 @@ class ShadeformClient:
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "User-Agent": f"shadeform-python/{self._get_version()}",
-                # Ensure api_key is always str (it can't be None at this point due to validation in __init__)
-                "X-API-Key": str(self.api_key)
+                # Ensure api_key is always str (can't be None at this point)
+                "X-API-Key": str(self.api_key),
             }
         )
 

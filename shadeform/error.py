@@ -57,7 +57,7 @@ class ShadeformAPIError(ShadeformError):
 
     def __str__(self) -> str:
         """Return string representation of the API error."""
-        base = f"API Error"
+        base = "API Error"
         if self.status_code:
             base = f"{base} {self.status_code}"
         return f"{base}: {self.message}"
