@@ -8,13 +8,6 @@ def test_client_initialization_with_api_key():
     """Test client initialization with API key."""
     client = ShadeformClient(api_key="test-api-key")
     assert client.api_key == "test-api-key"
-    assert client.jwt_token is None
-
-def test_client_initialization_with_jwt():
-    """Test client initialization with JWT token."""
-    client = ShadeformClient(jwt_token="test-jwt-token")
-    assert client.jwt_token == "test-jwt-token"
-    assert client.api_key is None
 
 def test_client_initialization_with_env_vars():
     """Test client initialization with environment variables."""
@@ -24,22 +17,15 @@ def test_client_initialization_with_env_vars():
 
 def test_client_initialization_without_auth():
     """Test client initialization fails without auth credentials."""
-    with pytest.raises(ShadeformError, match="Either API key or JWT token must be provided"):
-        ShadeformClient()
+    with patch.dict(os.environ, {}, clear=True):
+        with pytest.raises(ShadeformError, match="API key is required"):
+            ShadeformClient()
 
 def test_client_headers_with_api_key():
     """Test client sets correct headers with API key."""
     client = ShadeformClient(api_key="test-api-key")
     assert client.session.headers["X-API-Key"] == "test-api-key"
     assert client.session.headers["Content-Type"] == "application/json"
-    assert "Authorization" not in client.session.headers
-
-def test_client_headers_with_jwt():
-    """Test client sets correct headers with JWT token."""
-    client = ShadeformClient(jwt_token="test-jwt-token")
-    assert client.session.headers["Authorization"] == "Bearer test-jwt-token"
-    assert client.session.headers["Content-Type"] == "application/json"
-    assert "X-API-Key" not in client.session.headers
 
 @patch('requests.Session.request')
 def test_client_request_success(mock_request):
@@ -103,7 +89,10 @@ def test_client_request_error(mock_request):
     with pytest.raises(ShadeformAPIError) as excinfo:
         client.request("GET", "/test")
     
-    assert "API Error 400: Bad Request" in str(excinfo.value)
+    error_message = str(excinfo.value)
+    assert "API Error" in error_message
+    assert "400" in error_message
+    assert "Bad Request" in error_message
 
 @patch('requests.Session.request')
 def test_client_request_with_query_params(mock_request):

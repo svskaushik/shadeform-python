@@ -119,3 +119,18 @@ def validate_volume_size(size_gb: int) -> bool:
     MAX_SIZE = 16384  # 16TB
 
     return MIN_SIZE <= size_gb <= MAX_SIZE
+
+
+def validate_volume_type(volume_type: str) -> bool:
+    """
+    Validate that a volume type is supported.
+
+    Args:
+        volume_type: Volume type string (e.g., 'gp3', 'io2')
+
+    Returns:
+        True if valid, False otherwise
+    """
+    # List of known volume types (can be expanded)
+    valid_volume_types = ["gp3", "io2", "standard", "st1", "sc1"]
+    return volume_type in valid_volume_types

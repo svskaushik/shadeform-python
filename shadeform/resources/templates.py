@@ -1,6 +1,6 @@
 """Template management resource for Shadeform SDK."""
 
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional
 
 from .base import BaseResource
 from ..error import ShadeformValidationError
@@ -16,11 +16,12 @@ class TemplateClient(BaseResource):
         Returns:
             List of templates with basic information (id, name, framework)
         """
-        response = self._get_dict("/templates")
-        templates = response.get("templates", [])
-        return cast(
-            List[Dict[str, Any]], templates if isinstance(templates, list) else []
-        )
+        # Support both direct list responses and {"templates": [...]} format
+        response = self._make_request("GET", "/templates", expect_list=True)
+        if isinstance(response, dict):
+            templates = response.get("templates", [])
+            return templates if isinstance(templates, list) else []
+        return response if isinstance(response, list) else []
 
     def get_info(self, template_id: str) -> Dict[str, Any]:
         """
@@ -42,11 +43,12 @@ class TemplateClient(BaseResource):
             List of featured templates with basic information
             (id, name, description)
         """
-        response = self._get_dict("/templates/featured")
-        featured = response.get("featured", [])
-        return cast(
-            List[Dict[str, Any]], featured if isinstance(featured, list) else []
-        )
+        # Support both direct list responses and {"featured": [...]} format
+        response = self._make_request("GET", "/templates/featured", expect_list=True)
+        if isinstance(response, dict):
+            featured = response.get("featured", [])
+            return featured if isinstance(featured, list) else []
+        return response if isinstance(response, list) else []
 
     def save(
         self, name: str, config: Dict[str, Any], description: Optional[str] = None
@@ -62,7 +64,8 @@ class TemplateClient(BaseResource):
         Returns:
             Created template info including id
         """
-        payload = {"name": name, "config": config}
+        # Change "config" key to "launch_configuration" in payload
+        payload = {"name": name, "launch_configuration": config}
         if description:
             payload["description"] = description
 

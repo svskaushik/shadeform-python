@@ -26,7 +26,6 @@ class ShadeformClient:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        jwt_token: Optional[str] = None,
         base_url: Optional[str] = None,
     ) -> None:
         """
@@ -34,18 +33,16 @@ class ShadeformClient:
 
         Args:
             api_key: API key for authentication
-            jwt_token: JWT token for authentication
             base_url: Base URL for API requests
 
         Raises:
-            ShadeformAuthError: If neither API key nor JWT token is provided
+            ShadeformAuthError: If API key is not provided
         """
         self.api_key = api_key or os.getenv("SHADEFORM_API_KEY")
-        self.jwt_token = jwt_token or os.getenv("SHADEFORM_JWT_TOKEN")
         self.base_url = base_url or os.getenv("SHADEFORM_BASE_URL", DEFAULT_BASE_URL)
 
-        if not self.api_key and not self.jwt_token:
-            raise ShadeformAuthError("Either API key or JWT token must be provided")
+        if not self.api_key:
+            raise ShadeformAuthError("API key is required")
 
         self.session = requests.Session()
         self._setup_session()
@@ -63,13 +60,10 @@ class ShadeformClient:
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "User-Agent": f"shadeform-python/{self._get_version()}",
+                # Ensure api_key is always str (it can't be None at this point due to validation in __init__)
+                "X-API-Key": str(self.api_key)
             }
         )
-
-        if self.api_key:
-            self.session.headers.update({"X-API-Key": self.api_key})
-        elif self.jwt_token:
-            self.session.headers.update({"Authorization": f"Bearer {self.jwt_token}"})
 
     def request(
         self, method: str, endpoint: str, **kwargs: Any
@@ -161,5 +155,4 @@ class ShadeformClient:
 
     def __repr__(self) -> str:
         """Return string representation of the client."""
-        auth_type = "API Key" if self.api_key else "JWT Token"
-        return f"ShadeformClient(auth_type={auth_type}, base_url={self.base_url})"
+        return f"ShadeformClient(base_url={self.base_url})"

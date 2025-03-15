@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 
 from .base import BaseResource
 from ..error import ShadeformValidationError
-from ..utils.helpers import validate_volume_size
+from ..utils.helpers import validate_volume_size, validate_volume_type
 
 
 class VolumeClient(BaseResource):
@@ -39,6 +39,12 @@ class VolumeClient(BaseResource):
         if not validate_volume_size(size_gb):
             raise ShadeformValidationError(
                 f"Invalid volume size: {size_gb}GB", field="size_gb"
+            )
+        
+        # Add volume type validation
+        if not validate_volume_type(volume_type):
+            raise ShadeformValidationError(
+                f"Invalid volume type: {volume_type}", field="volume_type"
             )
 
         payload = {
@@ -75,9 +81,12 @@ class VolumeClient(BaseResource):
         Returns:
             List of volumes with basic information (id, name, status)
         """
-        response = self._get_dict("/volumes")
-        volumes = response.get("volumes", [])
-        return volumes if isinstance(volumes, list) else []
+        # Support both direct list responses and {"volumes": [...]} format
+        response = self._make_request("GET", "/volumes", expect_list=True)
+        if isinstance(response, dict):
+            volumes = response.get("volumes", [])
+            return volumes if isinstance(volumes, list) else []
+        return response if isinstance(response, list) else []
 
     def delete(self, volume_id: str) -> Dict[str, Any]:
         """

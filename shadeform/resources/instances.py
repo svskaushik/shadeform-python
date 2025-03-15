@@ -84,9 +84,12 @@ class InstanceClient(BaseResource):
             List of instances with basic information (id, name, status,
             instance_type)
         """
-        response = self._get_dict("/instances")
-        instances = response.get("instances", [])
-        return instances if isinstance(instances, list) else []
+        # Support both direct list responses and {"instances": [...]} format
+        response = self._make_request("GET", "/instances", expect_list=True)
+        if isinstance(response, dict):
+            instances = response.get("instances", [])
+            return instances if isinstance(instances, list) else []
+        return response if isinstance(response, list) else []
 
     def update(self, instance_id: str, updates: Dict[str, Any]) -> Dict[str, Any]:
         """

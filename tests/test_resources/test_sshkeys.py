@@ -48,13 +48,13 @@ def test_get_ssh_key_info(mock_request):
 @patch('shadeform.client.ShadeformClient.request')
 def test_delete_ssh_key(mock_request):
     """Test deleting an SSH key."""
-    mock_request.return_value = None
+    mock_request.return_value = {}
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.ssh_keys.delete("key-123")
     
     mock_request.assert_called_once_with("POST", "/sshkeys/key-123/delete")
-    assert result is None
+    assert result == {}
 
 @patch('shadeform.client.ShadeformClient.request')
 def test_list_ssh_keys(mock_request):
@@ -116,10 +116,10 @@ def test_add_ssh_key_with_invalid_key(mock_request):
 @patch('shadeform.client.ShadeformClient.request')
 def test_get_nonexistent_ssh_key(mock_request):
     """Test getting information about a non-existent SSH key."""
-    mock_request.return_value = None
+    mock_request.return_value = {}
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.ssh_keys.get_info("nonexistent-key")
     
     mock_request.assert_called_once_with("GET", "/sshkeys/nonexistent-key/info")
-    assert result is None
+    assert result == {}

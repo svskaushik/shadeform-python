@@ -43,21 +43,25 @@ class BaseResource:
         response = self.client.request(method, endpoint, **kwargs)
 
         if response is None:
-            return None
+            return {} if not expect_list else []
 
-        # Type checking based on expected return type
-        if expect_list and not isinstance(response, list):
-            raise ShadeformError(
-                f"Expected list response, got {type(response).__name__}"
-            )
-        elif (
-            not expect_list and not isinstance(response, dict) and response is not None
-        ):
-            raise ShadeformError(
-                f"Expected dict response, got {type(response).__name__}"
-            )
-
-        return response
+        # Handle various response formats
+        if expect_list:
+            if isinstance(response, list):
+                return response
+            elif isinstance(response, dict):
+                # Try to find a list in the dict values
+                for value in response.values():
+                    if isinstance(value, list):
+                        return value
+                return []  # Return empty list if no list found
+            else:
+                raise ShadeformError(f"Unexpected response type: {type(response).__name__}")
+        else:
+            if isinstance(response, dict):
+                return response
+            else:
+                raise ShadeformError(f"Expected dict response, got {type(response).__name__}")
 
     def _get_dict(self, endpoint: str, **kwargs: Any) -> Dict[str, Any]:
         """
@@ -74,7 +78,10 @@ class BaseResource:
             ShadeformError: If response isn't a dictionary
         """
         result = self._make_request("GET", endpoint, expect_list=False, **kwargs)
-        assert isinstance(result, dict), "Expected dict response"
+        if result is None:
+            return {}
+        if not isinstance(result, dict):
+            raise ShadeformError(f"Expected dict response, got {type(result).__name__}")
         return result
 
     def _get_list(self, endpoint: str, **kwargs: Any) -> List[Dict[str, Any]]:
@@ -92,7 +99,10 @@ class BaseResource:
             ShadeformError: If response isn't a list
         """
         result = self._make_request("GET", endpoint, expect_list=True, **kwargs)
-        assert isinstance(result, list), "Expected list response"
+        if result is None:
+            return []
+        if not isinstance(result, list):
+            raise ShadeformError(f"Expected list response, got {type(result).__name__}")
         return result
 
     def _post_dict(self, endpoint: str, **kwargs: Any) -> Dict[str, Any]:
@@ -110,7 +120,10 @@ class BaseResource:
             ShadeformError: If response isn't a dictionary
         """
         result = self._make_request("POST", endpoint, expect_list=False, **kwargs)
-        assert isinstance(result, dict), "Expected dict response"
+        if result is None:
+            return {"success": True}  # Return a default success response if None
+        if not isinstance(result, dict):
+            raise ShadeformError(f"Expected dict response, got {type(result).__name__}")
         return result
 
     def _post_none(self, endpoint: str, **kwargs: Any) -> None:

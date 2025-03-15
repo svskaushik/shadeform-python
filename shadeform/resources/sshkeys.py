@@ -81,8 +81,9 @@ class SSHKeyClient(BaseResource):
         Returns:
             List of SSH keys with basic information (id, name, is_default)
         """
-        response = self._get_dict("/sshkeys")
-        ssh_keys = response.get("ssh_keys", [])
-        return cast(
-            List[Dict[str, Any]], ssh_keys if isinstance(ssh_keys, list) else []
-        )
+        # Support both direct list responses and {"ssh_keys": [...]} format
+        response = self._make_request("GET", "/sshkeys", expect_list=True)
+        if isinstance(response, dict):
+            ssh_keys = response.get("ssh_keys", [])
+            return ssh_keys if isinstance(ssh_keys, list) else []
+        return response if isinstance(response, list) else []

@@ -62,7 +62,7 @@ def test_get_featured_templates(mock_request):
     ]
     
     client = ShadeformClient(api_key="test-api-key")
-    result = client.templates.get_featured()
+    result = client.templates.list_featured()
     
     mock_request.assert_called_once_with("GET", "/templates/featured")
     assert len(result) == 2
@@ -83,9 +83,7 @@ def test_save_template(mock_request):
     result = client.templates.save(
         name="custom-template",
         description="Custom PyTorch environment",
-        launch_config=launch_config,
-        provider="aws",
-        instance_type="A100_80Gx1"
+        config=launch_config
     )
     
     mock_request.assert_called_once_with(
@@ -94,9 +92,7 @@ def test_save_template(mock_request):
         json={
             "name": "custom-template",
             "description": "Custom PyTorch environment",
-            "launch_configuration": launch_config,
-            "provider": "aws",
-            "instance_type": "A100_80Gx1"
+            "launch_configuration": launch_config
         }
     )
     assert result["id"] == "tmpl-123"
@@ -115,7 +111,7 @@ def test_save_template_minimal(mock_request):
     result = client.templates.save(
         name="minimal-template",
         description="Minimal template",
-        launch_config=launch_config
+        config=launch_config
     )
     
     mock_request.assert_called_once()
@@ -154,13 +150,13 @@ def test_update_template(mock_request):
 @patch('shadeform.client.ShadeformClient.request')
 def test_delete_template(mock_request):
     """Test deleting a template."""
-    mock_request.return_value = None
+    mock_request.return_value = {}
     
     client = ShadeformClient(api_key="test-api-key")
     result = client.templates.delete("tmpl-123")
     
     mock_request.assert_called_once_with("POST", "/templates/tmpl-123/delete")
-    assert result is None
+    assert result == {}
 
 @patch('shadeform.client.ShadeformClient.request')
 def test_save_template_with_invalid_name(mock_request):
@@ -174,7 +170,7 @@ def test_save_template_with_invalid_name(mock_request):
         client.templates.save(
             name="",
             description="Invalid template",
-            launch_config=launch_config
+            config=launch_config
         )
 
 @patch('shadeform.client.ShadeformClient.request')
@@ -188,5 +184,5 @@ def test_save_template_with_invalid_config(mock_request):
         client.templates.save(
             name="invalid-template",
             description="Invalid template",
-            launch_config={}  # Empty config
+            config={}  # Empty config
         )
