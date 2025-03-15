@@ -75,13 +75,6 @@ client.templates.save(
 )
 ```
 
-## Documentation
-
-- [API Reference](docs/api/index.md)
-- [Examples](docs/examples.md)
-- [Contributing](CONTRIBUTING.md)
-- [Changelog](CHANGELOG.md)
-
 ## Development
 
 1. Clone the repository:
@@ -102,7 +95,7 @@ pytest
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ## License
 
