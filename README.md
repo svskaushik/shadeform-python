@@ -19,6 +19,19 @@ pip install --index-url https://test.pypi.org/simple/ shadeform
 ### Managing Instances
 
 ```python
+from shadeform import ShadeformClient, LaunchConfiguration
+
+# Initialize client
+client = ShadeformClient(api_key="your-api-key")
+
+# List instance types
+instance_types = client.instances.list_types()
+print(f"\nFound {len(instance_types)} instance types")
+for instance_type in instance_types:
+    if instance_types.index(instance_type) == 0:
+            print("\nFirst instance type structure:")
+            print(instance_type)
+
 # List all instances
 instances = client.instances.list_all()
 for instance in instances:
